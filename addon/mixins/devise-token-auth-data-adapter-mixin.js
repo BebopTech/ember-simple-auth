@@ -48,12 +48,16 @@ export default Ember.Mixin.create({
       this.get('session').invalidate();
     } else {
 
-      this.get('session').set('data.authenticated.access-token', headers['access-token']);
-      this.get('session').set('data.authenticated.expiry', headers['expiry']);
+      Ember.Logger.debug("new headers: ",headers);
+      //debugger;
+      if (headers['access-token'] != undefined && this.get('session.data.authenticated.access-token') != headers['access-token']) {
+        this.get('session').set('data.authenticated.access-token', headers['access-token']);
+        this.get('session').set('data.authenticated.expiry', headers['expiry']);
 
-      // this line is a little hack to force the session store to persist the change
-      // detailed here: https://github.com/simplabs/ember-simple-auth/issues/375#issuecomment-197533608
-      this.get('session').set('data.foo', 'bar');
+        // this line is a little hack to force the session store to persist the change
+        // detailed here: https://github.com/simplabs/ember-simple-auth/issues/375#issuecomment-197533608
+        this.get('session').set('data.foo', 'bar');
+      }
     }
     return this._super(...arguments);
   }
